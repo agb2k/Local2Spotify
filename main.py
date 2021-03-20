@@ -6,7 +6,7 @@ import os
 import spotipy
 
 # Data
-fileList = Path("D:/Music1/").rglob('*.mp3')
+fileList = Path("D:/Music/").rglob('*.mp3')
 data = {'music': []}
 song_list = []
 scope = "playlist-modify-public"
@@ -31,7 +31,13 @@ for path in fileList:
     song = f"{tag.title} {tag.artist} {tag.album}"
 
     result = spotify_object.search(q=song)
-    song_list.append(result['tracks']['items'][0]['uri'])
+
+    try:
+        song_list.append(result['tracks']['items'][0]['uri'])
+    except:
+        print("Unable to add the following songs:")
+        print(f"{tag.title} - {tag.artist}")
+        continue
 
     data['music'].append({
         'Title': tag.title,
@@ -44,4 +50,4 @@ for path in fileList:
 
 pre_playlist = spotify_object.user_playlists(user=username)
 playlist = pre_playlist['items'][0]['id']
-spotify_object.user_playlist_add_tracks(user=username, playlist_id=playlist, tracks=song_list)
+spotify_object.playlist_add_items(playlist_id=playlist, items=song_list)
