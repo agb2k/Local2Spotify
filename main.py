@@ -6,7 +6,6 @@ import os
 import spotipy
 import re
 
-
 # Input
 print("Enter your username:")
 username = input()
@@ -20,6 +19,7 @@ description = input()
 # Data
 fileList = Path(path_input).rglob('*.mp3')
 data = {'music': []}
+data_unable = {'music': []}
 song_list = []
 scope = "playlist-modify-public"
 client_id = os.environ.get('SPOTIPY_CLIENT_ID')
@@ -45,8 +45,8 @@ path, dirs, files = next(os.walk(path_input))
 num_files = len(files)
 
 # Loop through files
+print("Please wait till program is complete:")
 for x in fileList:
-    print(count)
     count += 1
     total_count += 1
     file = str(x)
@@ -57,7 +57,6 @@ for x in fileList:
     modified_album = re.sub(r"\([^()]*\)", "", f"{tag.album}")
 
     song = f"{modified_title} {tag.artist} {modified_album}"
-
     result = spotify_object.search(q=song)
 
     try:
@@ -76,6 +75,14 @@ for x in fileList:
                 print(f"{song_new} may not be accurate search query")
             except:
                 print(f"Unable to search query: {song_new}")
+                data_unable['music'].append({
+                    'Title': tag.title,
+                    'Artist': tag.artist,
+                    'Album': tag.album
+                })
+
+                with open("C:/Users/abhin/PycharmProjects/Local2Spotify/Error.json", 'w') as fp_new:
+                    json.dump(data_unable, fp_new, indent=4)
                 continue
 
     data['music'].append({
