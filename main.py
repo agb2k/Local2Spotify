@@ -22,6 +22,7 @@ data = {'music': []}
 data_unable = {'music': []}
 song_list = []
 scope = "playlist-modify-public"
+# Add these to environment variables on PC
 client_id = os.environ.get('SPOTIPY_CLIENT_ID')
 client_secret = os.environ.get('SPOTIPY_CLIENT_SECRET')
 redirect_uri = os.environ.get('SPOTIPY_REDIRECT_URI')
@@ -81,7 +82,7 @@ for x in fileList:
                     'Album': tag.album
                 })
 
-                with open("C:/Users/abhin/PycharmProjects/Local2Spotify/Error.json", 'w') as fp_new:
+                with open("Error.json", 'w') as fp_new:
                     json.dump(data_unable, fp_new, indent=4)
                 continue
 
@@ -91,7 +92,7 @@ for x in fileList:
         'Album': tag.album
     })
 
-    with open("C:/Users/abhin/PycharmProjects/Local2Spotify/Music.json", 'w') as fp:
+    with open("Music.json", 'w') as fp:
         json.dump(data, fp, indent=4)
 
     if count >= 100:
